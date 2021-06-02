@@ -5,8 +5,8 @@ import argparse
 import configparser
 import numpy as np
 from collections import OrderedDict
-from pv import log
-from pv import util
+from slackpv import log
+from slackpv import util
 
 CONFIG_FILE_NAME = os.path.join(str(pathlib.Path.home()), 'slackpv.conf')
 
@@ -27,7 +27,7 @@ SECTIONS['PV'] = {
     'pv-list': {
         'type': util.tupleize(conv=str, dtype=list),
         'default': "0,-1,1",
-        'help': "comma separated PV to log, e.g. "},
+        'help': "a string containing comma separated PVs to log, e.g. 2bma:TomoScan:Energy, 2bma:TomoScan:EnergyMode"},
     'pv-log-time': {
         'type': float,
         'default': 5,

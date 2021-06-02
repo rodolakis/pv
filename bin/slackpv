@@ -27,7 +27,7 @@ def onChanges(pvname=None, value=None, char_value=None, **kw):
     client = WebClient(token=bot_token)
     # ID of channel you want to post message to
     channel_id = "automated"
-    message = 'Energy: ' + char_value + ' keV'
+    message = pvname + ': ' + char_value
     try:
         # Call the conversations.list method using the WebClient
         result = client.chat_postMessage(
@@ -36,7 +36,7 @@ def onChanges(pvname=None, value=None, char_value=None, **kw):
             # You could also use a blocks[] array to send richer content
         )
         # Print result, which includes information about the message (like TS)
-        log.info(result)
+        # log.info(result)
 
     except SlackApiError as e:
         log.error(f"Error: {e}")
@@ -78,7 +78,7 @@ def run_slack(args):
 
     for x in range(len(args.pv_list)):
         global_PVs[x] = PV(args.pv_list[x])
-        # global_PVs[x].add_callback(onChanges)
+        global_PVs[x].add_callback(onChanges)
     try:
         while True:
             for x in range(len(args.pv_list)):
@@ -87,13 +87,6 @@ def run_slack(args):
     except KeyboardInterrupt:
         log.warning('interrupted!')
         log.warning('Log information saved at: %s', args.lfname)
-        # for x in range(len(args.pv_list)):
-        #     log.info('PV name: %s; value:  %s' % (args.pv_list[x], global_PVs[x].get()))            
-        # while True:
-        #     time.sleep(args.pv_log_time)   
-        # except KeyboardInterrupt:
-        #     log.warning('interrupted!')
-        #     log.warning('Log information saved at: %s', args.lfname)
 
 def main():
 

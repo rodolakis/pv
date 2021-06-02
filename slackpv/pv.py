@@ -1,6 +1,6 @@
 import time
 from epics import PV
-from slack2bm import log
+from slackpv import log
 
 
 def show_pv(args):
