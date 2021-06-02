@@ -1,0 +1,155 @@
+import os
+import sys
+import time
+import argparse
+import pathlib
+
+from datetime import datetime
+from epics import PV
+
+from dotenv import load_dotenv
+
+# Import WebClient from Python SDK (github.com/slackapi/python-slack-sdk)
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
+
+from slackpv import log
+from slackpv import config
+from slackpv import pv
+
+def onChanges(pvname=None, value=None, char_value=None, **kw):
+    log.info('PV Changed! %s %s %s', pvname, char_value, time.ctime())
+    bot_token = os.environ.get("BOT_TOKEN")
+    app_token = os.environ.get("APP_TOKEN") 
+
+    # WebClient insantiates a client that can call API methods
+    # When using Bolt, you can use either `app.client` or the `client` passed to listeners.
+    client = WebClient(token=bot_token)
+    # ID of channel you want to post message to
+    channel_id = "automated"
+    message = 'Energy: ' + char_value + ' keV'
+    try:
+        # Call the conversations.list method using the WebClient
+        result = client.chat_postMessage(
+            channel=channel_id,
+            text=message
+            # You could also use a blocks[] array to send richer content
+        )
+        # Print result, which includes information about the message (like TS)
+        log.info(result)
+
+    except SlackApiError as e:
+        log.error(f"Error: {e}")
+
+def init(args):
+    if not os.path.exists(str(args.config)):
+        config.write(str(args.config))
+    else:
+        raise RuntimeError("{0} already exists".format(args.config))
+
+def status(args):
+    config.show_config(args)
+
+def show(args):
+    pv.show_pv(args)
+
+def set_pv(args):
+    global_PVs = {}
+    log.info('Monitoring the following PVs:')
+    for x in range(len(args.pv_list)):
+        log.info('PV[%d]: %s' % (x, args.pv_list[x]))
+        global_PVs[x] = PV(args.pv_list[x])
+        log.info('PV name: %s; value:  %s' % (args.pv_list[x], global_PVs[x].get())) 
+
+def run_slack(args):
+    global_PVs = {}
+    log.info('Monitoring the following PVs:')
+
+    # Set bot tokens as environment values
+    env_path = os.path.join(str(pathlib.Path.home()), '.slackenv')
+    load_dotenv(dotenv_path=env_path)
+
+    bot_token = os.environ.get("BOT_TOKEN")
+    app_token = os.environ.get("APP_TOKEN") 
+
+    # WebClient insantiates a client that can call API methods
+    # When using Bolt, you can use either `app.client` or the `client` passed to listeners.
+    client = WebClient(token=bot_token)
+
+    for x in range(len(args.pv_list)):
+        global_PVs[x] = PV(args.pv_list[x])
+        # global_PVs[x].add_callback(onChanges)
+    try:
+        while True:
+            for x in range(len(args.pv_list)):
+                log.info('PV name: %s; value:  %s' % (args.pv_list[x], global_PVs[x].get()))            
+                time.sleep(args.pv_log_time)   
+    except KeyboardInterrupt:
+        log.warning('interrupted!')
+        log.warning('Log information saved at: %s', args.lfname)
+        # for x in range(len(args.pv_list)):
+        #     log.info('PV name: %s; value:  %s' % (args.pv_list[x], global_PVs[x].get()))            
+        # while True:
+        #     time.sleep(args.pv_log_time)   
+        # except KeyboardInterrupt:
+        #     log.warning('interrupted!')
+        #     log.warning('Log information saved at: %s', args.lfname)
+
+def main():
+
+    # set logs directory
+    home = os.path.expanduser("~")
+    logs_home = home + '/logs/'
+    # make sure logs directory exists
+    if not os.path.exists(logs_home):
+        os.makedirs(logs_home)
+    # setup logger
+    lfname = logs_home + 'slack_' + datetime.strftime(datetime.now(), "%Y-%m-%d_%H:%M:%S") + '.log'
+    log.setup_custom_logger(lfname)
+    log.warning('Logs are saved at: %s' % lfname)
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--config', **config.SECTIONS['general']['config'])
+    show_params   = config.PV_PARAMS
+    set_params    = config.PV_PARAMS
+    log_params    = config.PV_PARAMS
+
+    cmd_parsers = [
+        ('init',        init,           (),                             "Create configuration file"),
+        ('status',      status,         show_params,                    "Show the pv-cli status"),
+        ('set',         set_pv,         set_params,                     "Set PV to log as a comma-separated list"),
+        ('slack',       run_slack,        log_params,                   "Send the list of PVs to slack"),
+    ]
+
+    subparsers = parser.add_subparsers(title="Commands", metavar='')
+
+    for cmd, func, sections, text in cmd_parsers:
+        cmd_params = config.Params(sections=sections)
+        cmd_parser = subparsers.add_parser(cmd, help=text, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        cmd_parser = cmd_params.add_arguments(cmd_parser)
+        cmd_parser.set_defaults(_func=func)
+
+    args = config.parse_known_args(parser, subparser=True)
+    args.lfname = lfname
+    
+    try: 
+        # load args from default (config.py) if not changed
+        config.log_values(args)
+        args._func(args)
+        # undate meta5.config file
+        sections = config.PV_PARAMS
+        config.write(args.config, args=args, sections=sections)
+    except RuntimeError as e:
+        log.error(str(e))
+        sys.exit(1)
+
+
+    # pvs = pv.epics_energy('2bm:', '2bma:TomoScan:', '2bmbPG1:', '2bmbPG1:HDF1:')
+    # pvs['energy'].add_callback(onChanges)
+
+    # while True:
+    #     time.sleep(1.e-3)
+
+
+if __name__ == "__main__": 
+    main()
