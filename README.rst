@@ -24,6 +24,23 @@ Usage
 
     $ pv set --pv-list "2bma:TomoScan:Energy, 2bma:TomoScan:EnergyMode"
 
+For help::
+
+    pv set -h
+    usage: pv slack [-h] [--pv-list PV_LIST] [--pv-log-time PV_LOG_TIME]
+                    [--config FILE] [--verbose]
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      --pv-list PV_LIST     a string containing comma separated PVs to log, e.g.
+                            2bma:TomoScan:Energy, 2bma:TomoScan:EnergyMode
+                            (default: "None, ...")
+      --pv-log-time PV_LOG_TIME
+                            PVs log time in seconds (default: 5)
+      --config FILE         File name of configuration (default:
+                            ~/slackpv.conf)
+      --verbose             Verbose output (default: True)
+
 For all options::
 
     $ pv -h
