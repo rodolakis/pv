@@ -1,10 +1,13 @@
 ===============
-PV Slack logger
+pv Slack-Logger
 ===============
+
+**pv** provides an EPICS PV logger and slack support. A list of PVs are monitored and displayed on the console and saved in a text file at preset time interval (Logger). The same PVs are also broadcasted on a slack channel on-change using the EPICS callback mechanism (Slack).
 
 Usage
 =====
 
+**pv** provides 
 ::
 
     $ pv slack
@@ -54,11 +57,11 @@ In a prepared virtualenv or as root for system-wide installation clone the
 
 ::
 
-    $ git clone https://github.com/decarlof/slackpv slackpv
+    $ git clone https://github.com/decarlof/pv pv
 
-To install slackpv, run::
+To install pv, run::
 
-    $ cd slackpv
+    $ cd pv
     $ python setup.py install
 
 .. warning:: Make sure your python installation is in a location set by #!/usr/bin/env python, if not please edit the first line of the bin/dmagic file to match yours.
