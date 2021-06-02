@@ -1,11 +1,6 @@
 """Various utility functions."""
-import os
-import glob
-import math
 import argparse
-from collections import OrderedDict
 
-from slackpv import log
 
 def tupleize(num_items=None, conv=float, dtype=tuple):
     """Convert comma-separated string values to a *num-items*-tuple of values converted with

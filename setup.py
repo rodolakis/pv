@@ -4,15 +4,15 @@ import os
 
 
 setup(
-    name='slack2bm',
+    name='pv',
     version=open('VERSION').read().strip(),
     #version=__version__,
     author='Francesco De Carlo, Tao Zhou, Fanny Rodolakis, Byeongdu Lee',
     author_email='decarlof@gmail.com',
-    url='https://github.com/xray-imaging/slack2bm',
+    url='https://github.com/xray-imaging/pv',
     packages=find_packages(),
     include_package_data = True,
-    scripts=['bin/slackpv'],
-    description='cli to run a slack rob at 2-bm',
+    scripts=['bin/pv'],
+    description='cli to log and publish EPICS PV on slack',
     zip_safe=False,
 )
