@@ -7,7 +7,6 @@ pv Slack-Logger
 Usage
 =====
 
-**pv** provides 
 ::
 
     $ pv slack
