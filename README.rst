@@ -11,13 +11,13 @@ Usage
 
     $ pv slack
 
-PVs are logged at  --pv-log-time interval (default 5s)
+PVs are logged at  --pv-log-time interval (default 5 s):
 
 .. image:: docs/source/img/pv_log.png
     :width: 50%
     :align: center
 
-PVs are also sent to a slack channel on-change
+PVs are also sent to a slack channel on-change only:
 
 .. image:: docs/source/img/pv_slack.png
     :width: 50%
