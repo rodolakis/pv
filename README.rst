@@ -2,7 +2,7 @@
 pv Slack-Logger
 ===============
 
-**pv** provides an EPICS PV logger and slack support. A list of PVs are monitored and displayed on the console and saved in a text file at preset time interval (Logger). The same PVs are also broadcasted on a slack channel on-change using the EPICS callback mechanism (Slack).
+**pv** provides an EPICS PV logger and slack support. A list of PVs are monitored to be displayed on the console and saved in a text file at preset time interval (Logger). The same PVs are also broadcasted on a slack channel on-change using the EPICS callback mechanism.
 
 Usage
 =====
