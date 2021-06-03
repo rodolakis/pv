@@ -11,7 +11,7 @@ Usage
 
     $ pv slack
 
-PVs are logged at  --pv-log-time interval (default 5 s):
+PVs are logged and on-change published to the authorized slack channel at --pv-log-time interval (default 5 s):
 
 .. image:: docs/source/img/pv_log.png
     :width: 50%
@@ -30,18 +30,18 @@ PVs are also sent to a slack channel on-change only:
 For help::
 
     pv set -h
-    usage: pv slack [-h] [--pv-list PV_LIST] [--pv-log-time PV_LOG_TIME]
-                    [--config FILE] [--verbose]
+    usage: pv set [-h] [--pv-list PV_LIST] [--pv-log-time PV_LOG_TIME]
+                  [--config FILE] [--verbose]
 
     optional arguments:
       -h, --help            show this help message and exit
       --pv-list PV_LIST     a string containing comma separated PVs to log, e.g.
                             2bma:TomoScan:Energy, 2bma:TomoScan:EnergyMode
-                            (default: "None, ...")
+                            (default: 0,-1,1)
       --pv-log-time PV_LOG_TIME
                             PVs log time in seconds (default: 5)
       --config FILE         File name of configuration (default:
-                            ~/slackpv.conf)
+                            /home/beams/TOMO/slackpv.conf)
       --verbose             Verbose output (default: True)
 
 For all options::
@@ -57,9 +57,9 @@ For all options::
       
         init         Create configuration file
         status       Show the pv-cli status
-        set          Set PV to log as a comma-separated list
+        set          Set PV to monitor as a comma-separated list
+        log          Send the list of PVs to a logger
         slack        Send the list of PVs to slack
-
 
 Installation
 ============

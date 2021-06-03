@@ -5,8 +5,8 @@ import argparse
 import configparser
 import numpy as np
 from collections import OrderedDict
-from slackpv import log
-from slackpv import util
+from pv import log
+from pv import util
 
 CONFIG_FILE_NAME = os.path.join(str(pathlib.Path.home()), 'slackpv.conf')
 

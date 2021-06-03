@@ -26,27 +26,31 @@ def status(args):
     config.show_config(args)
 
 def set_pv(args):
+
+    for pvname in args.pv_list:
+        log.info('Checking\t%s', pvname)
+        pv_in = PV(pvname)
+        pv_value = pv_in.get()
+        connected, message = pv.check_pvs_connected(pv_in)
+
+def run_log(args):
     global_PVs = {}
-    log.info('Monitoring the following PVs:')
+    log.info('Logging the following PVs:')
+
     for x in range(len(args.pv_list)):
-        log.info('PV[%d]: %s' % (x, args.pv_list[x]))
         global_PVs[x] = PV(args.pv_list[x])
-        log.info('PV name: %s; value:  %s' % (args.pv_list[x], global_PVs[x].get())) 
+    try:
+        while True:
+            for x in range(len(args.pv_list)):
+                log.info('PV name: %s; value:  %s' % (args.pv_list[x], global_PVs[x].get()))            
+            time.sleep(args.pv_log_time)   
+    except KeyboardInterrupt:
+        log.warning('interrupted!')
+        log.warning('Log information saved at: %s', args.lfname)
 
 def run_slack(args):
     global_PVs = {}
-    log.info('Monitoring the following PVs:')
-
-    # Set bot tokens as environment values
-    env_path = os.path.join(str(pathlib.Path.home()), '.slackenv')
-    load_dotenv(dotenv_path=env_path)
-
-    bot_token = os.environ.get("BOT_TOKEN")
-    app_token = os.environ.get("APP_TOKEN") 
-
-    # WebClient insantiates a client that can call API methods
-    # When using Bolt, you can use either `app.client` or the `client` passed to listeners.
-    client = WebClient(token=bot_token)
+    log.info('Publishing on slack the following PVs on-change only:')
 
     for x in range(len(args.pv_list)):
         global_PVs[x] = PV(args.pv_list[x])
@@ -55,7 +59,7 @@ def run_slack(args):
         while True:
             for x in range(len(args.pv_list)):
                 log.info('PV name: %s; value:  %s' % (args.pv_list[x], global_PVs[x].get()))            
-                time.sleep(args.pv_log_time)   
+            time.sleep(args.pv_log_time)   
     except KeyboardInterrupt:
         log.warning('interrupted!')
         log.warning('Log information saved at: %s', args.lfname)
@@ -72,18 +76,24 @@ def main():
     lfname = logs_home + 'slack_' + datetime.strftime(datetime.now(), "%Y-%m-%d_%H:%M:%S") + '.log'
     log.setup_custom_logger(lfname)
     log.warning('Logs are saved at: %s' % lfname)
+
+    # Set slack bot tokens as environment values
+    env_path = os.path.join(str(pathlib.Path.home()), '.slackenv')
+    load_dotenv(dotenv_path=env_path)
     
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', **config.SECTIONS['general']['config'])
     show_params   = config.PV_PARAMS
     set_params    = config.PV_PARAMS
+    slack_params  = config.PV_PARAMS
     log_params    = config.PV_PARAMS
 
     cmd_parsers = [
         ('init',        init,           (),                             "Create configuration file"),
         ('status',      status,         show_params,                    "Show the pv-cli status"),
         ('set',         set_pv,         set_params,                     "Set PV to monitor as a comma-separated list"),
-        ('slack',       run_slack,      log_params,                     "Send the list of PVs to slack"),
+        ('log',         run_log,        log_params,                     "Send the list of PVs to a logger"),
+        ('slack',       run_slack,      slack_params,                   "Send the list of PVs to a logger and to slack"),
     ]
 
     subparsers = parser.add_subparsers(title="Commands", metavar='')
