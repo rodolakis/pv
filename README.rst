@@ -77,7 +77,7 @@ In a prepared virtualenv or as root for system-wide installation clone the
 
 ::
 
-    $ git clone https://github.com/decarlof/pv pv
+    $ git clone https://github.com/xray-imaging/pv pv
 
 To install pv, run::
 
