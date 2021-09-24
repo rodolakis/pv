@@ -73,10 +73,11 @@ Installing from source
 ======================
 
 In a prepared virtualenv or as root for system-wide installation clone the 
-`slack2pv <https://github.com/decarlof/slackpv>`_ from `GitHub <https://github.com>`_ repository
+pv Slack-Logger from its github repository
 
 ::
-
+    $ conda create -n pv
+    $ conda activate pv
     $ git clone https://github.com/xray-imaging/pv pv
 
 To install pv, run::
