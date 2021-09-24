@@ -86,7 +86,9 @@ To install pv, run::
     $ cd pv
     $ python setup.py install
 
-.. warning:: Make sure to edit the channel_id value in the OnChange() callback funtion to match the name of the slack channel that is autorized for this App. 
+.. warning:: Make sure to edit the channel_id value in the OnChange() callback function to match the name of the slack channel that is autorized for this App. This is located `here <https://github.com/decarlof/pv/blob/4cece52b0e04430e07a00364de76da5a28e48049/pv/pv.py#L20>`_.
+
+
 
 
 Dependencies
