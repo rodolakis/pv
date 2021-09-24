@@ -94,3 +94,4 @@ Install the following package::
     $ pip install python-dotenv
     $ pip install slack-bolt
     $ pip install pyepics
+    $ pip install numpy
