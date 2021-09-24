@@ -86,7 +86,8 @@ To install pv, run::
     $ cd pv
     $ python setup.py install
 
-.. warning:: Make sure your python installation is in a location set by #!/usr/bin/env python, if not please edit the first line of the bin/dmagic file to match yours.
+.. warning:: Make sure to edit the channel_id value in the OnChange() callback funtion to match the name of the slack channel that is autorized for this App. 
+
 
 Dependencies
 ============
