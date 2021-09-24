@@ -76,6 +76,7 @@ In a prepared virtualenv or as root for system-wide installation clone the
 pv Slack-Logger from its github repository
 
 ::
+
     $ conda create -n pv
     $ conda activate pv
     $ git clone https://github.com/xray-imaging/pv pv
