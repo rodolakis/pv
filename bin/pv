@@ -42,7 +42,7 @@ def run_log(args):
     try:
         while True:
             for x in range(len(args.pv_list)):
-                log.info('PV name: %s; value:  %s' % (args.pv_list[x], global_PVs[x].get()))            
+                log.info('PV name: %s; value:  %s' % (args.pv_list[x], global_PVs[x].get(as_string=True)))            
             time.sleep(args.pv_log_time)   
     except KeyboardInterrupt:
         log.warning('interrupted!')
@@ -58,7 +58,7 @@ def run_slack(args):
     try:
         while True:
             for x in range(len(args.pv_list)):
-                log.info('PV name: %s; value:  %s' % (args.pv_list[x], global_PVs[x].get()))            
+                log.info('PV name: %s; value:  %s' % (args.pv_list[x], global_PVs[x].get(as_string=True)))            
             time.sleep(args.pv_log_time)   
     except KeyboardInterrupt:
         log.warning('interrupted!')
