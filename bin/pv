@@ -53,7 +53,7 @@ def run_slack(args):
     log.info('Publishing on slack the following PVs on-change only:')
 
     for x in range(len(args.pv_list)):
-        global_PVs[x] = PV(args.pv_list[x])
+        global_PVs[x] = PV(args.pv_list[x], form='ctrl')
         global_PVs[x].add_callback(pv.onChanges)
     try:
         while True:
