@@ -73,18 +73,23 @@ Installing from source
 ======================
 
 In a prepared virtualenv or as root for system-wide installation clone the 
-`slack2pv <https://github.com/decarlof/slackpv>`_ from `GitHub <https://github.com>`_ repository
+pv Slack-Logger from its github repository
 
 ::
 
-    $ git clone https://github.com/decarlof/pv pv
+    $ conda create -n pv
+    $ conda activate pv
+    $ git clone https://github.com/xray-imaging/pv pv
 
 To install pv, run::
 
     $ cd pv
     $ python setup.py install
 
-.. warning:: Make sure your python installation is in a location set by #!/usr/bin/env python, if not please edit the first line of the bin/dmagic file to match yours.
+.. warning:: Make sure to edit the channel_id value in the OnChange() callback function to match the name of the slack channel that is autorized for this App. This is located `here <https://github.com/decarlof/pv/blob/e300de699e4daea9746606d29c14706a8b786332/pv/pv.py#L21>`_.
+
+
+
 
 Dependencies
 ============
@@ -94,3 +99,4 @@ Install the following package::
     $ pip install python-dotenv
     $ pip install slack-bolt
     $ pip install pyepics
+    $ pip install numpy
