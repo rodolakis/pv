@@ -11,6 +11,14 @@ Usage
 
     $ slackpvmonitor.sh
     
+with::
+
+    $ #!/bin/bash
+    $ source /APSshare/miniconda/x86_64/etc/profile.d/conda.sh
+    $ conda activate slackenv
+    $ ~/.conda/envs/slackenv/bin/pv slack --pv-list "ACIS:ShutterPermit, OPS:message4, OPS:message5" --pv-log-time 60  
+    
+    
 or::
 
     $ pv slack --pv-list "ACIS:ShutterPermit, OPS:message4, OPS:message5" --pv-log-time 60
@@ -107,7 +115,7 @@ To install pv, run::
 Dependencies
 ============
 
-Install the following package::
+Install the following packages in env/slackenv::
 
     $ pip install python-dotenv
     $ pip install slack-bolt
