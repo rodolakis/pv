@@ -99,7 +99,7 @@ pv Slack-Logger from its github repository
 
 ::
 
-    $ git clone https://github.com/xray-imaging/pv pv
+    $ git clone https://github.com/xray-imaging/pv slackpv
 
 To install pv, run::
 
