@@ -9,7 +9,21 @@ Usage
 
 ::
 
-    $ pv slack
+    $ slackpvmonitor.sh
+    
+or::
+
+    $ pv slack --pv-list "ACIS:ShutterPermit, OPS:message4, OPS:message5" --pv-log-time 60
+
+
+To start in screen session::
+
+    $ screen -dmS SLACKPV slackpvmonitor.sh
+    $ screen -list
+    There is a screen on:
+            1759231.SLACKPV (Detached)
+    1 Socket in /run/screen/S-29iduser.
+
 
 PVs are logged and on-change published to the authorized slack channel at --pv-log-time interval (default 5 s):
 
@@ -77,14 +91,13 @@ pv Slack-Logger from its github repository
 
 ::
 
-    $ conda create -n pv
-    $ conda activate pv
     $ git clone https://github.com/xray-imaging/pv pv
 
 To install pv, run::
 
-    $ cd pv
-    $ python setup.py install
+    $ conda activate slackenv
+    $ cd slackpv
+    $ ~/.conda/envs/slackenv/bin/python setup.py install
 
 .. warning:: Make sure to edit the channel_id value in the OnChange() callback function to match the name of the slack channel that is autorized for this App. This is located `here <https://github.com/decarlof/pv/blob/e300de699e4daea9746606d29c14706a8b786332/pv/pv.py#L21>`_.
 
